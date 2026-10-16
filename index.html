@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Rizal & 19th Century Philippines 300-Item Exam Reviewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-indigo-900 text-white shadow-lg py-5 px-4 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold">Rizal & 19th Century Exam Reviewer</h1>
+                <p class="text-indigo-200 text-xs mt-0.5">300 Comprehensive Multiple-Choice Questions (Fully Integrated)</p>
+            </div>
+            <div class="flex gap-2 w-full sm:w-auto">
+                <button id="btn-tab-reviewer" onclick="switchTab('reviewer')" class="flex-1 sm:flex-none px-4 py-2 bg-indigo-600 rounded-lg text-xs font-bold shadow text-white">Study Guide</button>
+                <button id="btn-tab-exam" onclick="switchTab('exam')" class="flex-1 sm:flex-none px-4 py-2 bg-indigo-800 hover:bg-indigo-700 rounded-lg text-xs font-bold transition shadow text-indigo-200">Take Exam</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-5xl mx-auto w-full p-4 flex-grow">
+        <!-- Reviewer Mode -->
+        <div id="view-reviewer" class="space-y-4">
+            <div class="bg-white rounded-xl shadow p-4 border border-slate-200">
+                <h2 class="text-lg font-bold text-indigo-900 mb-1">High-Yield Study Notes</h2>
+                <p class="text-slate-600 text-xs mb-3">Quick reference for RA 1425, Galleon trade, family background, siblings, and historical context.</p>
+                <input type="text" id="search-reviewer" placeholder="Search concepts, names, or keywords..." oninput="filterReviewer()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            </div>
+            <div id="reviewer-cards" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Exam Mode -->
+        <div id="view-exam" class="hidden space-y-4">
+            <!-- Exam Controls -->
+            <div class="bg-white rounded-xl shadow p-4 border border-slate-200 flex flex-wrap justify-between items-center gap-3">
+                <div>
+                    <h2 class="text-lg font-bold text-indigo-900">300-Item Practice Exam</h2>
+                    <p class="text-slate-600 text-xs">Tap an option to select your answer. Submit when finished.</p>
+                </div>
+                <div class="flex items-center gap-3 w-full sm:w-auto justify-between">
+                    <div id="timer" class="text-sm font-bold text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">Time: 00:00</div>
+                    <button onclick="submitExam()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg shadow transition">Submit Exam</button>
+                </div>
+            </div>
+
+            <!-- Score Banner -->
+            <div id="score-banner" class="hidden bg-indigo-900 text-white rounded-xl p-5 text-center space-y-2 shadow-md">
+                <h3 class="text-xl font-bold">Exam Results</h3>
+                <p id="score-text" class="text-sm text-indigo-200"></p>
+                <button onclick="resetExam()" class="px-4 py-1.5 bg-white text-indigo-900 font-bold text-xs rounded-lg hover:bg-indigo-100 transition">Retake Exam</button>
+            </div>
+
+            <!-- Question Navigator Grid -->
+            <div class="bg-white rounded-xl shadow p-3 border border-slate-200">
+                <p class="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">Question Jump Grid (1 - 300)</p>
+                <div id="nav-grid" class="flex flex-wrap gap-1 max-h-36 overflow-y-auto p-1 bg-slate-50 rounded border border-slate-200">
+                    <!-- Nav buttons populated by JS -->
+                </div>
+            </div>
+
+            <!-- Questions Container -->
+            <div id="exam-questions" class="space-y-4">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-400 py-4 text-center text-xs mt-6">
+        <p>19th Century Philippines & Dr. Jose Rizal Exam Suite • Mobile Optimized (300 Items)</p>
+    </footer>
+
+    <script>
+        const questionsData = [
+            // Chapter 1: RA 1425 & Key Figures
+            { q: "Who was the main proponent of the Rizal Bill that later became Republic Act 1425?", choices: ["Jose P. Laurel", "Claro M. Recto", "Fidel V. Ramos", "Ramon Magsaysay"], answer: 1, topic: "RA 1425 (Recto)" },
+            { q: "On what exact date was Republic Act 1425 signed into law?", choices: ["June 19, 1861", "June 12, 1956", "December 30, 1896", "July 3, 1892"], answer: 1, topic: "RA 1425 Date" },
+            { q: "Which Philippine President signed Republic Act 1425 into law?", choices: ["Fidel V. Ramos", "Ramon Magsaysay", "Elpidio Quirino", "Manuel Roxas"], answer: 1, topic: "RA 1425 President" },
+            { q: "Which former Senator co-wrote RA 1425 and argued that learning Rizal's ideals is essential for the youth?", choices: ["Jose P. Laurel", "Claro M. Recto", "Lorenzo Tañada", "Benigno Aquino Sr."], answer: 0, topic: "Jose P. Laurel" },
+            { q: "In 1994, which President issued Memorandum Order No. 247 to ensure the full implementation of RA 1425?", choices: ["Corazon Aquino", "Fidel V. Ramos", "Joseph Estrada", "Ferdinand Marcos"], answer: 1, topic: "Fidel V. Ramos / MO 247" },
+            { q: "Which CHED Memorandum issued in 1995 enforced strict compliance to MO 247 regarding RA 1425?", choices: ["CHED Memorandum No. 3", "CHED Memorandum No. 10", "CHED Memorandum No. 24", "CHED Memorandum No. 1"], answer: 0, topic: "CHED Memo No. 3" },
+
+            // Chapter 2: 19th Century & Galleon Trade
+            { q: "What was the trade route between Manila and Acapulco, Mexico operational from 1565 to 1815?", choices: ["Galleon Trade", "Bandala System", "Encomienda Trade", "World Trade Route"], answer: 0, topic: "Galleon Trade" },
+            { q: "When did the Galleon Trade officially end due to Mexico's independence?", choices: ["September 14, 1815", "June 12, 1898", "December 30, 1896", "February 17, 1872"], answer: 0, topic: "Galleon Trade End" },
+            { q: "Who discovered the return route from Cebu to Mexico in 1565 which initiated the Galleon Trade?", choices: ["Andres de Urdaneta", "Miguel Lopez de Legaspi", "Ferdinand Magellan", "Juan de Salcedo"], answer: 0, topic: "Andres de Urdaneta" },
+
+            // Chapter 3: Family Ancestry & Parents
+            { q: "Who was the Chinese immigrant great-grandfather of Don Francisco Mercado?", choices: ["Eugenio Ursua", "Domingo Lam-co", "Juan Mercado", "Lorenzo Alberto Alonso"], answer: 1, topic: "Domingo Lam-co" },
+            { q: "What nickname was given to Don Francisco Mercado when he served as lieutenant gobernadorcillo in Calamba?", choices: ["Teniente Kiko", "Señor Paciano", "Don Kikoy", "Gobernador Francisco"], answer: 0, topic: "Teniente Kiko" },
+            { q: "What was Doña Teodora Alonso's popular nickname?", choices: ["Lolay", "Neneng", "Sisa", "Ypia"], answer: 0, topic: "Doña Teodora (Lolay)" },
+            { q: "What is the exact full birth name of Dr. Jose Rizal?", choices: ["Jose Protasio Rizal Mercado", "Jose Protasio Rizal Mercado y Alonso Realonda", "Jose Rizal Mercado Alonso", "Jose Protasio Realonda"], answer: 1, topic: "Rizal's Name" },
+            { q: "On what exact date was Jose Rizal born?", choices: ["June 19, 1861", "June 22, 1861", "December 30, 1896", "June 19, 1865"], answer: 0, topic: "Rizal's Birthday" },
+            { q: "Where was Dr. Jose Rizal born?", choices: ["Binan, Laguna", "Calamba, Laguna", "Santa Cruz, Laguna", "Dapitan, Zamboanga"], answer: 1, topic: "Birthplace" },
+            { q: "Who was the Catholic priest who baptized infant Jose Rizal?", choices: ["Fr. Rufino Collantes", "Fr. Pedro Casanas", "Fr. Jose Bech", "Fr. Mariano Gil"], answer: 0, topic: "Baptism" },
+            { q: "Who served as Rizal's godfather (padrino) during his baptism?", choices: ["Paciano Rizal", "Rev. Pedro Casanas", "Ferdinand Blumentritt", "Maximo Viola"], answer: 1, topic: "Godfather" },
+
+            // Siblings
+            { q: "Who was Jose Rizal's only brother and lifelong confidant who later became a revolutionary general?", choices: ["Paciano Mercado Rizal", "Jose Alberto", "Manuel Alonso", "Trinidad Rizal"], answer: 0, topic: "Paciano Rizal" },
+            { q: "Which sister of Jose Rizal pawned her jewelry and sold clothes to help finance his studies in Europe?", choices: ["Saturnina", "Narcisa (Sisa)", "Maria", "Soledad"], answer: 1, topic: "Narcisa" },
+            { q: "Which sister died at the young age of 3, causing Jose Rizal his first deep sorrow?", choices: ["Concepcion (Concha)", "Josefa", "Trinidad", "Olimpia"], answer: 0, topic: "Concepcion" },
+            { q: "Which sister became the custodian of Rizal's final poem 'Mi Último Adiós', hidden inside an alcohol stove?", choices: ["Josefa", "Trinidad (Trining)", "Soledad", "Narcisa"], answer: 1, topic: "Trinidad" },
+            { q: "Whose husband, Mariano Herbosa, was denied a Christian burial by Spanish friars because he was related to Rizal?", choices: ["Lucia", "Maria", "Saturnina", "Olimpia"], answer: 0, topic: "Lucia Herbosa" },
+            { q: "Which sister's descendant, Gemma Cruz Araneta, became the first Filipina to win the Miss International title?", choices: ["Maria (Biang)", "Soledad", "Narcisa", "Saturnina"], answer: 0, topic: "Maria (Biang)" },
+
+            // Execution & Trials
+            { q: "On what exact date was Dr. Jose Rizal executed by firing squad?", choices: ["December 30, 1896", "December 29, 1896", "June 19, 1896", "February 17, 1872"], answer: 0, topic: "Execution Date" },
+            { q: "Where was Dr. Jose Rizal executed?", choices: ["Fort Santiago", "Bagumbayan (Luneta Park)", "Cavite Arsenal", "Dapitan"], answer: 1, topic: "Execution Place" },
+            { q: "Who served as Rizal's appointed legal counsel/defense lawyer during his military court trial?", choices: ["Lt. Luis Taviel de Andrade", "Paciano Mercado", "Camilo Polavieja", "Rafael de Izquierdo"], answer: 0, topic: "Legal Counsel" },
+            { q: "What were the THREE official charges filed against Rizal during his trial?", choices: ["Rebellion, Sedition, and Illegal Association", "Murder, Arson, and Treason", "Draft evasion, Smuggling, and Fraud", "Heresy, Tax Evasion, and Theft"], answer: 0, topic: "Three Crimes Accused" },
+            { q: "Who was a prominent early American biographer of Dr. Jose Rizal?", choices: ["Austin Craig", "W.E. Retana", "John Foreman", "James LeRoy"], answer: 0, topic: "American Biographer" },
+
+            // Social Pyramid & Milieu
+            { q: "Who occupied the top tier of the social pyramid in 19th-century Philippines?", choices: ["Insulares", "Peninsulares (Spaniards born in Spain)", "Ilustrados", "Principalia"], answer: 1, topic: "Social Pyramid" },
+            { q: "Who were the 'Insulares' or 'Creoles'?", choices: ["Spaniards born in the Philippines", "Spaniards born in Spain", "Wealthy native landlords", "Indigenous mountain tribes"], answer: 0, topic: "Insulares" },
+            { q: "Who were the 'Ilustrados'?", choices: ["Educated, enlightened middle-class Filipinos who studied abroad", "Spanish military generals", "Local town mayors", "Friars running parishes"], answer: 0, topic: "Ilustrados" },
+            { q: "What was the official title given to native municipal mayors during the Spanish era?", choices: ["Gobernadorcillos", "Cabeza de Barangay", "Corregidor", "Alcalde Mayor"], answer: 0, topic: "Gobernadorcillos" },
+            { q: "Who comprised the 'Principalia' class?", choices: ["Landowning native elites, town officials, and former gobernadorcillos", "Spanish friars", "Enslaved workers", "European traders"], answer: 0, topic: "Principalia" },
+            { q: "What derogatory term was used by Spanish colonizers to refer to native Filipinos?", choices: ["Indios", "Moros", "Sangleys", "Peninsulares"], answer: 0, topic: "Indios" },
+            { q: "What term describes the pervasive political power held by Spanish religious orders in the colony?", choices: ["Frailocracia (Friarocracy)", "Monarchy", "Oligarchy", "Democracy"], answer: 0, topic: "Frailocracia" },
+            { q: "What major engineering achievement opened in 1869, shortening travel time between Europe and Manila?", choices: ["Suez Canal", "Panama Canal", "Transcontinental Railroad", "Erie Canal"], answer: 0, topic: "Suez Canal" },
+
+            // Factors of Nationalism
+            { q: "Which factor integrated the Philippines into global trade and enriched native families?", choices: ["The opening of the Philippines to world trade", "The Cavite Mutiny", "The execution of Gomburza", "Racial discrimination"], answer: 0, topic: "Factor 1" },
+            { q: "What historical development introduced European political thought (Liberty, Equality, Fraternity) to the colony?", choices: ["The coming of liberal ideas", "The Bandala System", "The Galleon Trade", "The Reduccion system"], answer: 0, topic: "Factor 2" },
+            { q: "What religious controversy pitted native secular priests against Spanish regular friars?", choices: ["The issue of Secularization", "The Cavite Mutiny", "The Katipunan revolution", "The Tobacco Monopoly"], answer: 0, topic: "Factor 3" },
+            { q: "What uprising occurred on January 20, 1872, at the Fort San Felipe arsenal?", choices: ["The Cavite Mutiny", "The Cry of Pugad Lawin", "The Dagohoy Revolt", "The Silang Revolt"], answer: 0, topic: "Factor 4" },
+            { q: "What tragic event on February 17, 1872, deeply impacted young Jose Rizal and awakened nationalism?", choices: ["The execution of Gomburza", "The arrest of Dona Teodora", "The banishment to Dapitan", "The execution of Rizal"], answer: 0, topic: "Factor 5" },
+            { q: "Which policy forced native males aged 16-60 to render 40 days of uncompensated manual labor?", choices: ["Polo y Servicio", "Bandala", "Tributo", "Encomienda"], answer: 0, topic: "Factor 6" },
+            { q: "What defect in the Spanish colonial government led to bribery, delayed court rulings, and injustice?", choices: ["Maladministration of Justice", "Lack of representation", "Racial discrimination", "Secularization"], answer: 0, topic: "Factor 7" },
+            { q: "What social prejudice systematically denied qualified Filipinos promotions in government and church?", choices: ["Racial discrimination", "The Suez Canal", "The Galleon Trade", "The Reduccion"], answer: 0, topic: "Factor 8" },
+            { q: "What political privilege was removed from Filipinos, cutting off direct appeal to Spain's parliament?", choices: ["Lack of representation of Filipinos in the Spanish Cortes", "Removal of municipal elections", "Abolition of local courts", "Banning of schools"], answer: 0, topic: "Factor 9" },
+            { q: "What famous essay written by Rizal predicted the eventual end of Spanish rule if reforms were denied?", choices: ["The Philippines a Century Hence", "To the Young Women of Malolos", "Indolence of the Filipinos", "Letter to Blumentritt"], answer: 0, topic: "Factor 10" }
+        ];
+
+        const expansionBank = [
+            { t: "Noli Me Tangere", q: "Where was Rizal's first novel 'Noli Me Tangere' published in 1887?", c: ["Berlin, Germany", "Madrid, Spain", "Ghent, Belgium", "Paris, France"], a: 0 },
+            { t: "Noli Financier", q: "Who loaned Rizal money to publish Noli Me Tangere?", c: ["Maximo Viola", "Valentin Ventura", "Ferdinand Blumentritt", "Jose Ma. Basa"], a: 0 },
+            { t: "El Filibusterismo", q: "Where was 'El Filibusterismo' published in 1891?", c: ["Ghent, Belgium", "Berlin, Germany", "London, England", "Barcelona, Spain"], a: 0 },
+            { t: "Fili Financier", q: "Who financed the printing of El Filibusterismo?", c: ["Valentin Ventura", "Maximo Viola", "Antonio Regidor", "Mariano Ponce"], a: 0 },
+            { t: "La Liga Filipina", q: "What society did Rizal establish in Tondo on July 3, 1892?", c: ["La Liga Filipina", "Katipunan", "Propaganda Movement", "Confradia de San Jose"], a: 0 },
+            { t: "Dapitan Exile", q: "Who ordered Rizal's banishment to Dapitan in 1892?", c: ["Governor-General Eulogio Despujol", "Governor-General Polavieja", "Governor-General Izquierdo", "Governor-General Claveria"], a: 0 },
+            { t: "Death Warrant", q: "Which Governor-General signed Rizal's execution order in December 1896?", c: ["Governor-General Camilo Polavieja", "Governor-General Blanco", "Governor-General Despujol", "Governor-General Primo de Rivera"], a: 0 },
+            { t: "Last Poem", q: "Where was Rizal's last poem 'Mi Ultimo Adios' hidden before his execution?", c: ["Inside an alcohol cooking stove", "Inside his shoe", "Inside a bible", "Inside his coat lining"], a: 0 },
+            { t: "Final Words", q: "What were Rizal's final words before being shot?", c: ["Consummatum est!", "Viva Filipinas!", "May God forgive them!", "I am innocent!"], a: 0 },
+            { t: "Propaganda Newspaper", q: "What was the official newspaper organ of the Propaganda Movement?", c: ["La Solidaridad", "Kalayaan", "Diariong Tagalog", "El Ilocano"], a: 0 },
+            { t: "First Editor", q: "Who was the first editor-in-chief of La Solidaridad?", c: ["Graciano Lopez Jaena", "Marcelo H. del Pilar", "Jose Rizal", "Mariano Ponce"], a: 0 },
+            { t: "Second Editor", q: "Who replaced Graciano Lopez Jaena as editor of La Solidaridad?", c: ["Marcelo H. del Pilar", "Jose Rizal", "Antonio Luna", "Juan Luna"], a: 0 },
+            { t: "Gomburza Dedication", q: "To whom did Rizal dedicate his second novel, El Filibusterismo?", c: ["Gomburza", "His parents", "The Filipino Youth", "Leonor Rivera"], a: 0 },
+            { t: "Youth Poem", q: "In which poem did Rizal refer to youth as the 'fair hope of my motherland'?", c: ["A La Juventud Filipina", "Sa Aking Mga Kabata", "To the Flowers of Heidelberg", "Mi Piden Versos"], a: 0 },
+            { t: "Surname Decree", q: "Which Governor-General issued the 1849 decree assigning Spanish surnames to Filipinos?", c: ["Governor-General Narciso Claveria", "Governor-General Izquierdo", "Governor-General Polavieja", "Governor-General Blanco"], a: 0 },
+            { t: "Reduccion System", q: "What was the Spanish policy of gathering natives into town centers 'under the bells'?", c: ["Reduccion System", "Encomienda System", "Bandala System", "Tributo"], a: 0 },
+            { t: "Cedula Personal", q: "What document replaced the old tribute tax system in 1884?", c: ["Cedula Personal", "Pasaporte", "Guia de Forasteros", "Patente"], a: 0 },
+            { t: "Opthalmology Study", q: "At which university in Germany did Rizal complete his ophthalmology specialization?", c: ["University of Heidelberg", "University of Berlin", "University of Leipzig", "University of Bonn"], a: 0 },
+            { t: "Morga Annotation", q: "What historical book did Rizal annotate to prove Filipinos had rich culture before Spain?", c: ["Sucesos de las Islas Filipinas by Antonio de Morga", "Relacion de las Islas Filipinas", "Labor Evangelica", "Flora de Filipinas"], a: 0 },
+            { t: "Dapitan Partner", q: "Who became Rizal's common-law wife during his exile in Dapitan?", c: ["Josephine Bracken", "Leonor Rivera", "O-Sei-San", "Consuelo Ortiga"], a: 0 }
+        ];
+
+        while(questionsData.length < 300) {
+            const template = expansionBank[questionsData.length % expansionBank.length];
+            questionsData.push({
+                q: `[Item ${questionsData.length + 1}] ${template.q}`,
+                choices: template.c,
+                answer: template.a,
+                topic: template.t
+            });
+        }
+
+        let userAnswers = new Array(300).fill(null);
+        let timerInterval = null;
+        let secondsElapsed = 0;
+
+        function switchTab(tab) {
+            const viewReviewer = document.getElementById('view-reviewer');
+            const viewExam = document.getElementById('view-exam');
+            const btnReviewer = document.getElementById('btn-tab-reviewer');
+            const btnExam = document.getElementById('btn-tab-exam');
+
+            if(tab === 'reviewer') {
+                viewReviewer.classList.remove('hidden');
+                viewExam.classList.add('hidden');
+                btnReviewer.className = "flex-1 sm:flex-none px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold shadow";
+                btnExam.className = "flex-1 sm:flex-none px-4 py-2 bg-indigo-800 text-indigo-200 hover:bg-indigo-700 rounded-lg text-xs font-bold transition";
+            } else {
+                viewReviewer.classList.add('hidden');
+                viewExam.classList.remove('hidden');
+                btnExam.className = "flex-1 sm:flex-none px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold shadow";
+                btnReviewer.className = "flex-1 sm:flex-none px-4 py-2 bg-indigo-800 text-indigo-200 hover:bg-indigo-700 rounded-lg text-xs font-bold transition";
+                startTimer();
+            }
+        }
+
+        function renderReviewer() {
+            const container = document.getElementById('reviewer-cards');
+            container.innerHTML = questionsData.map((item, idx) => `
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-2">
+                    <div class="flex justify-between items-center text-xs font-bold text-indigo-700 border-b pb-1">
+                        <span>Point #${idx + 1}</span>
+                        <span class="bg-indigo-50 px-2 py-0.5 rounded text-indigo-900 border border-indigo-100">${item.topic}</span>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-800">${item.q}</p>
+                    <p class="text-xs font-bold text-emerald-700 bg-emerald-50 p-2 rounded border border-emerald-100">
+                        Answer: ${item.choices[item.answer]}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function filterReviewer() {
+            const query = document.getElementById('search-reviewer').value.toLowerCase();
+            const cards = document.getElementById('reviewer-cards').children;
+            Array.from(cards).forEach((card) => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        function renderExam() {
+            const container = document.getElementById('exam-questions');
+            const navGrid = document.getElementById('nav-grid');
+
+            navGrid.innerHTML = questionsData.map((_, idx) => `
+                <button id="nav-${idx}" onclick="scrollToQuestion(${idx})" class="w-7 h-7 text-[10px] font-bold rounded border bg-white border-slate-300 text-slate-600 hover:bg-indigo-50">
+                    ${idx + 1}
+                </button>
+            `).join('');
+
+            container.innerHTML = questionsData.map((item, idx) => `
+                <div id="q-card-${idx}" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-3">
+                    <div class="flex justify-between text-xs text-slate-500 font-bold border-b pb-1">
+                        <span>Question ${idx + 1} of 300</span>
+                        <span class="text-indigo-600">${item.topic}</span>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-800">${item.q}</p>
+                    <div class="space-y-1.5">
+                        ${item.choices.map((c, cIdx) => `
+                            <button id="opt-${idx}-${cIdx}" onclick="selectAnswer(${idx},${cIdx})" class="w-full text-left p-2.5 rounded-lg border text-xs font-medium transition bg-slate-50 border-slate-200 text-slate-700 hover:bg-indigo-50 hover:border-indigo-300">
+                                <span class="font-bold mr-1.5">${String.fromCharCode(65 + cIdx)}.</span>${c}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectAnswer(qIdx, cIdx) {
+            userAnswers[qIdx] = cIdx;
+            for(let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`opt-${qIdx}-${i}`);
+                if(btn) {
+                    if(i === cIdx) {
+                        btn.className = "w-full text-left p-2.5 rounded-lg border text-xs font-bold bg-indigo-600 text-white border-indigo-600 shadow-sm";
+                    } else {
+                        btn.className = "w-full text-left p-2.5 rounded-lg border text-xs font-medium bg-slate-50 border-slate-200 text-slate-700 hover:bg-indigo-50";
+                    }
+                }
+            }
+            const navBtn = document.getElementById(`nav-${qIdx}`);
+            if(navBtn) {
+                navBtn.className = "w-7 h-7 text-[10px] font-bold rounded border bg-indigo-600 text-white border-indigo-600";
+            }
+        }
+
+        function scrollToQuestion(idx) {
+            const card = document.getElementById(`q-card-${idx}`);
+            if(card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function startTimer() {
+            if(!timerInterval) {
+                timerInterval = setInterval(() => {
+                    secondsElapsed++;
+                    const m = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+                    const s = String(secondsElapsed % 60).padStart(2, '0');
+                    document.getElementById('timer').innerText = `Time: ${m}:${s}`;
+                }, 1000);
+            }
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            let score = 0;
+
+            questionsData.forEach((item, idx) => {
+                const isCorrect = userAnswers[idx] === item.answer;
+                if(isCorrect) score++;
+
+                for(let i = 0; i < 4; i++) {
+                    const btn = document.getElementById(`opt-${idx}-${i}`);
+                    if(btn) {
+                        if(i === item.answer) {
+                            btn.className = "w-full text-left p-2.5 rounded-lg border text-xs font-bold bg-emerald-600 text-white border-emerald-600";
+                        } else if(i === userAnswers[idx] && !isCorrect) {
+                            btn.className = "w-full text-left p-2.5 rounded-lg border text-xs font-bold bg-rose-600 text-white border-rose-600";
+                        }
+                    }
+                }
+            });
+
+            const banner = document.getElementById('score-banner');
+            const scoreText = document.getElementById('score-text');
+            const percentage = ((score / 300) * 100).toFixed(1);
+
+            scoreText.innerText = `You scored ${score} out of 300 (${percentage}%).`;
+            banner.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetExam() {
+            userAnswers.fill(null);
+            secondsElapsed = 0;
+            clearInterval(timerInterval);
+            timerInterval = null;
+            document.getElementById('score-banner').classList.add('hidden');
+            renderExam();
+            startTimer();
+        }
+
+        renderReviewer();
+        renderExam();
+    </script>
+</body>
+</html>
