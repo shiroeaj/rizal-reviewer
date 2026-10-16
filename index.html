@@ -3,20 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Rizal & 19th Century Philippines 300-Item Exam Reviewer</title>
+    <title>Rizal & 19th Century Philippines 70-Item Exam Reviewer</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body[data-theme="dark"] {
+            color-scheme: dark;
+            background-color: #111827;
+            color: #e5e7eb;
+        }
+        body[data-theme="dark"] .bg-white { background-color: #1f2937 !important; }
+        body[data-theme="dark"] .bg-slate-50 { background-color: #151e2c !important; }
+        body[data-theme="dark"] .bg-slate-800 { background-color: #0b1220 !important; }
+        body[data-theme="dark"] .bg-indigo-900 { background-color: #17243a !important; }
+        body[data-theme="dark"] .bg-indigo-800 { background-color: #24334b !important; }
+        body[data-theme="dark"] .bg-indigo-600 { background-color: #3d6098 !important; }
+        body[data-theme="dark"] .bg-indigo-50 { background-color: #25364d !important; }
+        body[data-theme="dark"] .bg-emerald-50 { background-color: #17382f !important; }
+        body[data-theme="dark"] .bg-emerald-600 { background-color: #167653 !important; }
+        body[data-theme="dark"] .bg-rose-600 { background-color: #a83e50 !important; }
+        body[data-theme="dark"] .text-slate-800 { color: #e5e7eb !important; }
+        body[data-theme="dark"] .text-slate-700 { color: #d1d9e5 !important; }
+        body[data-theme="dark"] .text-slate-600 { color: #bdc8d8 !important; }
+        body[data-theme="dark"] .text-slate-500 { color: #a5b2c4 !important; }
+        body[data-theme="dark"] .text-indigo-900 { color: #d3e0f3 !important; }
+        body[data-theme="dark"] .text-indigo-700,
+        body[data-theme="dark"] .text-indigo-600 { color: #b6cceb !important; }
+        body[data-theme="dark"] .text-indigo-200 { color: #c6d3e5 !important; }
+        body[data-theme="dark"] .text-emerald-700 { color: #74e0b4 !important; }
+        body[data-theme="dark"] .border-slate-100,
+        body[data-theme="dark"] .border-slate-200,
+        body[data-theme="dark"] .border-slate-300,
+        body[data-theme="dark"] .border-indigo-100,
+        body[data-theme="dark"] .border-indigo-300 { border-color: #3a485b !important; }
+        body[data-theme="dark"] .border-b { border-color: #3a485b !important; }
+        body[data-theme="dark"] input { background-color: #151e2c; color: #e5e7eb; }
+        body[data-theme="dark"] input::placeholder { color: #9aa8ba; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+<body data-theme="dark" class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
     <!-- Header -->
     <header class="bg-indigo-900 text-white shadow-lg py-5 px-4 sticky top-0 z-50">
         <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold">Rizal & 19th Century Exam Reviewer</h1>
-                <p class="text-indigo-200 text-xs mt-0.5">300 Comprehensive Multiple-Choice Questions (Fully Integrated)</p>
+                <p class="text-indigo-200 text-xs mt-0.5">70 High-Yield Multiple-Choice Questions</p>
             </div>
             <div class="flex gap-2 w-full sm:w-auto">
                 <button id="btn-tab-reviewer" onclick="switchTab('reviewer')" class="flex-1 sm:flex-none px-4 py-2 bg-indigo-600 rounded-lg text-xs font-bold shadow text-white">Study Guide</button>
                 <button id="btn-tab-exam" onclick="switchTab('exam')" class="flex-1 sm:flex-none px-4 py-2 bg-indigo-800 hover:bg-indigo-700 rounded-lg text-xs font-bold transition shadow text-indigo-200">Take Exam</button>
+                <button id="btn-theme" onclick="toggleTheme()" class="flex-1 sm:flex-none px-3 py-2 bg-indigo-800 hover:bg-indigo-700 rounded-lg text-xs font-bold transition shadow text-indigo-200" aria-pressed="true">Use light theme</button>
             </div>
         </div>
     </header>
@@ -40,7 +75,7 @@
             <!-- Exam Controls -->
             <div class="bg-white rounded-xl shadow p-4 border border-slate-200 flex flex-wrap justify-between items-center gap-3">
                 <div>
-                    <h2 class="text-lg font-bold text-indigo-900">300-Item Practice Exam</h2>
+                    <h2 class="text-lg font-bold text-indigo-900">70-Item Practice Exam</h2>
                     <p class="text-slate-600 text-xs">Tap an option to select your answer. Submit when finished.</p>
                 </div>
                 <div class="flex items-center gap-3 w-full sm:w-auto justify-between">
@@ -58,7 +93,7 @@
 
             <!-- Question Navigator Grid -->
             <div class="bg-white rounded-xl shadow p-3 border border-slate-200">
-                <p class="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">Question Jump Grid (1 - 300)</p>
+                <p class="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">Question Jump Grid (1 - 70)</p>
                 <div id="nav-grid" class="flex flex-wrap gap-1 max-h-36 overflow-y-auto p-1 bg-slate-50 rounded border border-slate-200">
                     <!-- Nav buttons populated by JS -->
                 </div>
@@ -73,7 +108,7 @@
 
     <!-- Footer -->
     <footer class="bg-slate-800 text-slate-400 py-4 text-center text-xs mt-6">
-        <p>19th Century Philippines & Dr. Jose Rizal Exam Suite • Mobile Optimized (300 Items)</p>
+        <p>19th Century Philippines & Dr. Jose Rizal Exam Suite • 70 Items</p>
     </footer>
 
     <script>
@@ -159,22 +194,41 @@
             { t: "Cedula Personal", q: "What document replaced the old tribute tax system in 1884?", c: ["Cedula Personal", "Pasaporte", "Guia de Forasteros", "Patente"], a: 0 },
             { t: "Opthalmology Study", q: "At which university in Germany did Rizal complete his ophthalmology specialization?", c: ["University of Heidelberg", "University of Berlin", "University of Leipzig", "University of Bonn"], a: 0 },
             { t: "Morga Annotation", q: "What historical book did Rizal annotate to prove Filipinos had rich culture before Spain?", c: ["Sucesos de las Islas Filipinas by Antonio de Morga", "Relacion de las Islas Filipinas", "Labor Evangelica", "Flora de Filipinas"], a: 0 },
-            { t: "Dapitan Partner", q: "Who became Rizal's common-law wife during his exile in Dapitan?", c: ["Josephine Bracken", "Leonor Rivera", "O-Sei-San", "Consuelo Ortiga"], a: 0 }
+            { t: "Dapitan Partner", q: "Who became Rizal's common-law wife during his exile in Dapitan?", c: ["Josephine Bracken", "Leonor Rivera", "O-Sei-San", "Consuelo Ortiga"], a: 0 },
+            { t: "RA 1425 Curriculum", q: "What does RA 1425 require schools to include in their curricula?", c: ["Rizal's life, works, and writings, especially Noli Me Tangere and El Filibusterismo", "A course on Spanish military history", "Mandatory study of Philippine geography only", "Training in colonial administration"], a: 0 },
+            { t: "Katipunan", q: "Who founded the Katipunan in 1892?", c: ["Andres Bonifacio", "Emilio Aguinaldo", "Apolinario Mabini", "Marcelo H. del Pilar"], a: 0 },
+            { t: "Rizal's Friend", q: "Which Austrian scholar and physician became one of Rizal's closest friends in Europe?", c: ["Ferdinand Blumentritt", "Maximo Viola", "Valentin Ventura", "Antonio de Morga"], a: 0 },
+            { t: "Propaganda Movement", q: "What was the Propaganda Movement's central goal?", c: ["Peaceful reforms and equal rights for Filipinos under Spanish rule", "Immediate armed independence led by the Katipunan", "Restoration of the Galleon Trade", "Establishment of a Spanish friar-led government"], a: 0 }
         ];
 
-        while(questionsData.length < 300) {
-            const template = expansionBank[questionsData.length % expansionBank.length];
+        expansionBank.forEach((item) => {
             questionsData.push({
-                q: `[Item ${questionsData.length + 1}] ${template.q}`,
-                choices: template.c,
-                answer: template.a,
-                topic: template.t
+                q: item.q,
+                choices: item.c,
+                answer: item.a,
+                topic: item.t
             });
-        }
+        });
 
-        let userAnswers = new Array(300).fill(null);
+        let userAnswers = new Array(questionsData.length).fill(null);
         let timerInterval = null;
         let secondsElapsed = 0;
+
+        function toggleTheme() {
+            const isDark = document.body.dataset.theme !== 'dark';
+            document.body.dataset.theme = isDark ? 'dark' : 'light';
+            localStorage.setItem('rizal-reviewer-theme', document.body.dataset.theme);
+            const button = document.getElementById('btn-theme');
+            button.innerText = isDark ? 'Use light theme' : 'Use dark theme';
+            button.setAttribute('aria-pressed', String(isDark));
+        }
+
+        const savedTheme = localStorage.getItem('rizal-reviewer-theme');
+        if(savedTheme === 'light') {
+            document.body.dataset.theme = 'light';
+            document.getElementById('btn-theme').innerText = 'Use dark theme';
+            document.getElementById('btn-theme').setAttribute('aria-pressed', 'false');
+        }
 
         function switchTab(tab) {
             const viewReviewer = document.getElementById('view-reviewer');
@@ -234,7 +288,7 @@
             container.innerHTML = questionsData.map((item, idx) => `
                 <div id="q-card-${idx}" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-3">
                     <div class="flex justify-between text-xs text-slate-500 font-bold border-b pb-1">
-                        <span>Question ${idx + 1} of 300</span>
+                        <span>Question ${idx + 1} of ${questionsData.length}</span>
                         <span class="text-indigo-600">${item.topic}</span>
                     </div>
                     <p class="text-xs font-semibold text-slate-800">${item.q}</p>
@@ -307,9 +361,9 @@
 
             const banner = document.getElementById('score-banner');
             const scoreText = document.getElementById('score-text');
-            const percentage = ((score / 300) * 100).toFixed(1);
+            const percentage = ((score / questionsData.length) * 100).toFixed(1);
 
-            scoreText.innerText = `You scored ${score} out of 300 (${percentage}%).`;
+            scoreText.innerText = `You scored ${score} out of ${questionsData.length} (${percentage}%).`;
             banner.classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
