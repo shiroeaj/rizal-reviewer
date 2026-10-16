@@ -210,7 +210,32 @@
             });
         });
 
-        let userAnswers = new Array(questionsData.length).fill(null);
+        function shuffleItems(items) {
+            const shuffled = items.slice();
+            for(let index = shuffled.length - 1; index > 0; index--) {
+                const swapIndex = Math.floor(Math.random() * (index + 1));
+                [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+            }
+            return shuffled;
+        }
+
+        function createExamQuestions() {
+            return shuffleItems(questionsData).map((item) => {
+                const choices = shuffleItems(item.choices.map((text, index) => ({
+                    text,
+                    isAnswer: index === item.answer
+                })));
+
+                return {
+                    ...item,
+                    choices: choices.map((choice) => choice.text),
+                    answer: choices.findIndex((choice) => choice.isAnswer)
+                };
+            });
+        }
+
+        let examQuestions = createExamQuestions();
+        let userAnswers = new Array(examQuestions.length).fill(null);
         let timerInterval = null;
         let secondsElapsed = 0;
 
@@ -279,16 +304,16 @@
             const container = document.getElementById('exam-questions');
             const navGrid = document.getElementById('nav-grid');
 
-            navGrid.innerHTML = questionsData.map((_, idx) => `
+            navGrid.innerHTML = examQuestions.map((_, idx) => `
                 <button id="nav-${idx}" onclick="scrollToQuestion(${idx})" class="w-7 h-7 text-[10px] font-bold rounded border bg-white border-slate-300 text-slate-600 hover:bg-indigo-50">
                     ${idx + 1}
                 </button>
             `).join('');
 
-            container.innerHTML = questionsData.map((item, idx) => `
+            container.innerHTML = examQuestions.map((item, idx) => `
                 <div id="q-card-${idx}" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-3">
                     <div class="flex justify-between text-xs text-slate-500 font-bold border-b pb-1">
-                        <span>Question ${idx + 1} of ${questionsData.length}</span>
+                        <span>Question ${idx + 1} of ${examQuestions.length}</span>
                         <span class="text-indigo-600">${item.topic}</span>
                     </div>
                     <p class="text-xs font-semibold text-slate-800">${item.q}</p>
@@ -343,7 +368,7 @@
             clearInterval(timerInterval);
             let score = 0;
 
-            questionsData.forEach((item, idx) => {
+            examQuestions.forEach((item, idx) => {
                 const isCorrect = userAnswers[idx] === item.answer;
                 if(isCorrect) score++;
 
@@ -361,15 +386,16 @@
 
             const banner = document.getElementById('score-banner');
             const scoreText = document.getElementById('score-text');
-            const percentage = ((score / questionsData.length) * 100).toFixed(1);
+            const percentage = ((score / examQuestions.length) * 100).toFixed(1);
 
-            scoreText.innerText = `You scored ${score} out of ${questionsData.length} (${percentage}%).`;
+            scoreText.innerText = `You scored ${score} out of ${examQuestions.length} (${percentage}%).`;
             banner.classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function resetExam() {
-            userAnswers.fill(null);
+            examQuestions = createExamQuestions();
+            userAnswers = new Array(examQuestions.length).fill(null);
             secondsElapsed = 0;
             clearInterval(timerInterval);
             timerInterval = null;
